@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>New Post</title>
+
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+</head>
+
+<body>
+    <div id="post-editor" class="post-editor js-post-editor">
+
+        <div style="position: relative;">
+            <div>
+                <div></div>
+
+                <textarea id="postArea" cols="92" rows="15" tabindex="101"
+                          data-min-length="">
+                </textarea>
+                <input id="docUID" name="fkey" type="hidden" value="{{doc_uid}}">
+            </div>
+        </div>
+
+        <div class="fl" style="margin-top: 8px; height:24px;">&nbsp;</div>
+        <div id="draft-saved" class="draft-saved community-option fl"
+             style="margin-top: 8px; height:24px; display:none;">
+            draft saved
+        </div>
+
+        <div id="draft-discarded" class="draft-discarded community-option fl"
+             style="margin-top: 8px; height:24px; display:none;">
+            draft discarded
+        </div>
+
+        <!--<div id="wmd-preview" class="wmd-preview"></div>-->
+        <div></div>
+
+        <!--<div class="edit-block">-->
+            <!--<input id="fkey" name="fkey" type="hidden"-->
+                   <!--value="4446b2e3139cf3e29ff0384066ad739e3bca3a28743a91ec80a51ea3cb8de2d8">-->
+            <!--&lt;!&ndash;<input id="author" name="author" type="text">&ndash;&gt;-->
+            <!--<input type="submit" id="savePost">-->
+        <!--</div>-->
+
+        <div id="question-only-section">
+
+            <div class="form-submit cbt">
+                <button id="savePost" class="btn btn__with-icon"
+                        type="submit" tabindex="120" autocomplete="off">
+                    Save Changes
+                </button>
+
+                <a href="{{url_for('remove_doc', doc_uid=doc_uid)}}"
+                   class="btn">Delete</a>
+
+                <a href="{{url_for('index')}}" class="btn">Home</a>
+
+
+                <!--<button id="deletePost" class="btn btn__with-icon" style="background-color: red;"-->
+                        <!--type="submit" tabindex="120" autocomplete="off">-->
+                    <!--Delete-->
+                <!--</button>-->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var oldContent;
+
+        $(populatePostArea);
+        function populatePostArea(){
+            {%if old_content%}
+                $('textarea#postArea').val('{{old_content}}');
+            {%else%}
+                $('textarea#postArea').val('New content');
+            {%endif%}
+
+            oldContent = $('textarea#postArea').val();
+            //echo('Old content: ' + oldContent);
+        }
+
+
+        $('textarea#postArea').on('change keyup paste', autoSaveChanges);
+        function autoSaveChanges(){
+            newContent = $('textarea#postArea').val();
+
+            if (oldContent != newContent) {
+                $('#savePost').show();
+                oldContent = newContent;
+            }
+        }
+
+
+        function echo(param) {
+            console.log(param);
+        }
+
+
+        function toAlert() {
+            alert();
+        }
+
+
+        $('#savePost').click(savePost);
+        function savePost() {
+            var doc_uid = $('#docUID').val();
+            var payload = {"content": oldContent};
+            var ajax_success = false;
+
+            $.ajax({
+                type: 'POST',
+                url: '/docs/' + doc_uid + '',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                // Flask expects this attribute `data`. If it
+                // would be empty, give it the value '{}'.
+                // This would prevent a bad HTTP request error (400) in Flask
+                // For more valid minimal JSON strings, see:
+                // http://stackoverflow.com/questions/30621802/why-does-json-parse-fail-with-the-empty-string/30621997#30621997
+                data: JSON.stringify(payload),
+
+                success: function(response) {
+                    $('textarea#postArea').val(response['content']);
+                    ajax_success = true;
+                    echo(response);
+
+                    $('#savePost').hide();
+                },
+
+                error: function(error) {
+                    console.log('AJAX Failed!'); // DEBUG
+                    ajax_success = false;
+                    echo(error);
+                }
+            });
+            return ajax_success;
+        }
+
+    </script>
+</body>
+</html>
