@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+<style media="screen">
+body{
+  margin: 0;
+  background-color: aliceblue;
+}
+h1{
+  width: 100%;
+  text-align: center;
+  font-family: sans-serif;
+  color: #28234C
+}
+ul{
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 30% 30% 30%;
+  grid-column-gap: 3%;
+  align-items: center;
+  justify-content: center;
+  padding: 1vmax;
+}
+li{
+  text-decoration: none;
+  list-style-type: none;
+}
+.form{
+  padding: 2vmax;
+  display:grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 30% 60%;
+  align-items: center;
+  justify-content: center;
+}
+.btn__with-icon{
+  width: 50%;
+  height: 10vh;
+  box-sizing: border-box;
+  padding: 2vmax;
+  border-radius: 1vmax;
+  background-color: #282c34;
+  color: aliceblue;
+  font-size: 1.2em
+}
+.form-submit button:hover{
+  animation: lift 750ms linear infinite;
+}
+@keyframes lift {
+  0%{transform: translateY(0);}
+  50%{transform: translateY(-0.5vh);}
+  100%{transform: translateY(0vh);}
+
+}
+</style>
+</head>
+<body>
+
+      <h1>Welcome Home!</h1>
+<div class="form">
+
+    <div id="question-only-section">
+        <div class="form-submit cbt">
+            <button id="newPost" class="btn btn__with-icon"
+                    type="submit" autocomplete="off">
+                New Note
+            </button>
+
+        </div>
+    </div>
+
+    <ul>
+        {%for item in doc_list%}
+            <li>
+                <a href="{{url_for('view_doc', doc_uid=item.uid)}}"> {{item.uid}}</a>
+            </li>
+        {%endfor%}
+
+    </ul>
+
+</div>
+
+
+    <script>
+        var oldContent;
+
+        $('#newPost').click(newPost);
+        function newPost() {
+            var ajax_success = false;
+
+            $.ajax({
+                type: 'POST',
+                url: '/docs',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                // Flask expects this attribute `data`. If it
+                // would be empty, give it the value '{}'.
+                // This would prevent a bad HTTP request error (400) in Flask
+                // For more valid minimal JSON strings, see:
+                // http://stackoverflow.com/questions/30621802/why-does-json-parse-fail-with-the-empty-string/30621997#30621997
+                data: JSON.stringify({}),
+
+                success: function(response) {
+                    window.location.replace("http://127.0.0.1:5000/docs/" + response['docUID']);
+
+                    ajax_success = true;
+                    echo(response);
+
+
+                },
+
+                error: function(error) {
+                    console.log('AJAX Failed!'); // DEBUG
+                    ajax_success = false;
+                    echo(error);
+                }
+            });
+            return ajax_success;
+        }
+
+    </script>
+</body>
+</html>
