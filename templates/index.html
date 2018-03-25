@@ -7,16 +7,69 @@
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
     </script>
+<style media="screen">
+body{
+  margin: 0;
+  background-color: aliceblue;
+}
+h1{
+  width: 100%;
+  text-align: center;
+  font-family: sans-serif;
+  color: #28234C
+}
+ul{
+  display: grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 30% 30% 30%;
+  grid-column-gap: 3%;
+  align-items: center;
+  justify-content: center;
+  padding: 1vmax;
+}
+li{
+  text-decoration: none;
+  list-style-type: none;
+}
+.form{
+  padding: 2vmax;
+  display:grid;
+  grid-template-rows: 100%;
+  grid-template-columns: 30% 60%;
+  align-items: center;
+  justify-content: center;
+}
+.btn__with-icon{
+  width: 50%;
+  height: 10vh;
+  box-sizing: border-box;
+  padding: 2vmax;
+  border-radius: 1vmax;
+  background-color: #282c34;
+  color: aliceblue;
+  font-size: 1.2em
+}
+.form-submit button:hover{
+  animation: lift 750ms linear infinite;
+}
+@keyframes lift {
+  0%{transform: translateY(0);}
+  50%{transform: translateY(-0.5vh);}
+  100%{transform: translateY(0vh);}
+
+}
+</style>
 </head>
 <body>
-<div>
-    Welcome Home!
+
+      <h1>Welcome Home!</h1>
+<div class="form">
 
     <div id="question-only-section">
         <div class="form-submit cbt">
             <button id="newPost" class="btn btn__with-icon"
-                    type="submit" tabindex="120" autocomplete="off">
-                New Doc!
+                    type="submit" autocomplete="off">
+                New Note
             </button>
 
         </div>
