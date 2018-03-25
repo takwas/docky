@@ -8,18 +8,83 @@
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
     </script>
+<style media="screen">
+body{
+  margin: 0;
+  background-color: #282C34
+}
+#post-editor{
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: fit-content;
+  width: fit-content;
+
+}
+h1{
+  font-family: monospace;
+  color: aliceblue
+}
+  textarea{
+    height: 40vh;
+    width: 50vw;
+    background-color: #FAFAFA;
+    border-radius: 5vmax;
+    border: 1px solid black;
+    padding: 5vmax;
+    outline: none;
+    font-family: sans-serif;
+  }
+  textarea:focus{
+    box-shadow: 0px 0px 10px 0px white;
+    border-color: white;
+    background-color: #fff
+  }
+.form-submit button{
+  width: 150px;
+  border-radius: 2vmax;
+  padding: 1vmax;
+  outline: none;
+  background-color: white;
+  color: #282C34
+}
+.form-submit button:hover{
+  background-color: #282C34;
+  color: white
+}
+button:nth-of-type(2){
+  width: 150px;
+  border-radius: 2vmax;
+  padding: 1vmax;
+  outline: none;
+  background-color: #D44A3E;
+  color: black;
+  border-color: #D44A3E;
+  float: right
+}
+button:nth-of-type(2):hover{
+  color:white;
+  background-color: #D44A3E
+}
+button a{
+  text-decoration: none;
+  color: inherit;
+
+}
+</style>
 </head>
 
 <body>
     <div id="post-editor" class="post-editor js-post-editor">
 
+        <h1>Create a new note:</h1>
         <div style="position: relative;">
             <div>
                 <div></div>
 
-                <textarea id="postArea" cols="92" rows="15" tabindex="101"
-                          data-min-length="">
-                </textarea>
+                <textarea id="postArea" data-min-length="" placeholder="Type here..."></textarea>
                 <input id="docUID" name="fkey" type="hidden" value="{{doc_uid}}">
             </div>
         </div>
@@ -53,10 +118,10 @@
                     Save Changes
                 </button>
 
-                <a href="{{url_for('remove_doc', doc_uid=doc_uid)}}"
-                   class="btn">Delete</a>
+                <button><a href="{{url_for('remove_doc', doc_uid=doc_uid)}}"
+                   class="btn" >Delete</a></button>
 
-                <a href="{{url_for('index')}}" class="btn">Home</a>
+                <a href="{{url_for('index')}}" class="btn" style="position: absolute;text-decoration: none;font-size: 1.5em;top: 0;right:0;margin: 1vmax;font-family:sans-serif;color:white">Home</a>
 
 
                 <!--<button id="deletePost" class="btn btn__with-icon" style="background-color: red;"-->
@@ -75,8 +140,7 @@
         function populatePostArea(){
             {%if old_content%}
                 $('textarea#postArea').val('{{old_content}}');
-            {%else%}
-                $('textarea#postArea').val('New content');
+
             {%endif%}
 
             oldContent = $('textarea#postArea').val();

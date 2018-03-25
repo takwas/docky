@@ -140,8 +140,7 @@ button a{
         function populatePostArea(){
             {%if old_content%}
                 $('textarea#postArea').val('{{old_content}}');
-            {%else%}
-                $('textarea#postArea').val('New content');
+
             {%endif%}
 
             oldContent = $('textarea#postArea').val();

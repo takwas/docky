@@ -34,7 +34,7 @@ def after_every_request(response):
 
 @app.route('/')
 def index():
-    docs = Doc.query.all()
+    docs = Doc.query.filter_by(status=ACTIVE_STATUS).all()
     return render_template('index.html', doc_list=docs)
 
 
@@ -55,7 +55,7 @@ def view_doc(doc_uid):
 @app.route('/docs', methods=['POST'])
 def create_new_doc():
     # doc = Doc(content=request_data[''])
-    doc = Doc(content='Type here...')
+    doc = Doc()
     db.session.add(doc)
     db.session.commit()
 
